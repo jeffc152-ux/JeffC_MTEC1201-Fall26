@@ -1,134 +1,121 @@
 /*
   Name: Jeffery Chong
   Title: Catch the Glitch
-  Instructions: Move your mouse to hover over the glitching square to "stabilize" it. 
-                Press any key on your keyboard to trigger an emergency system reboot.
-  Description: This sketch explores the theme of digital instability and human intervention. 
-               The 'glitch' behaves erratically using randomized states, and the user acts 
-               as an anti-virus agent attempting to capture and neutralize the system error.
+  Instructions: 
+    - Move your mouse over the screen to search for the shifting glitch.
+    - Click and hold the mouse button to "overclock" the system and intensify the corruption.
+    - Press the 'R' or 'r' key to completely reset the system's baseline color palette.
+  Description: 
+    This concept/theme explores the aesthetic of digital decay, cyber-fragmentation, 
+    and system instability. By monitoring the mouse's velocity and position, the sketch 
+    proconstructs a dynamic canvas that responds to user urgency, leaving behind artifacts 
+    of a visual system struggling to maintain its structure.
 */
 
-// 1. Declared Variables
-let glitchX;          // X position of the glitch
-let glitchY;          // Y position of the glitch
-let glitchSize;        // Responsive size of the glitch
-let systemStatus;      // State of the system: "ERRATIC", "STABLE", or "REBOOT"
-let glitchColor;       // Dynamic color variable
-let stabilityTimer = 0; // Tracks how long the user has contained the glitch
+// Declared variables for system state, positions, and colors
+let glitchX;
+let glitchY;
+let particleSize;
+let systemStability;
+let systemSpeed = 5;
+let baseHue;
+let scanlineY = 0;
 
 function setup() {
-  // Makes the canvas responsive to the initial window size
+  // Makes the canvas fully responsive to the initial window size
   createCanvas(800, 600);
-  rectMode(CENTER);
-  resetGlitch();
+  colorMode(HSB, 360, 100, 100, 100);
+  background(0);
+  
+  // Initialize variable values
+  glitchX = width / 2;
+  glitchY = height / 2;
+  baseHue = random(180, 280); // Starts with cyber blues/purples
 }
 
 function draw() {
-  // Deep cyber-grid background color
-  background(10, 15, 25);
+  // Semi-transparent background creates a digital trailing/ghosting effect
+  background(0, 0, 0, 12);
   
-  // Calculate responsive sizing based on canvas width
-  glitchSize = width * 0.08; 
-
-  // Measure the distance between the mouse and the glitch
-  let distance = dist(mouseX, mouseY, glitchX, glitchY);
-
-  // 2. Conditional Statements (if, else if, else)
-  if (keyIsPressed) {
-    // If a keyboard key is held, trigger a system reboot
-    systemStatus = "REBOOT";
-  } else if (distance < glitchSize / 2) {
-    // If the mouse is hovering inside the glitch boundaries
-    systemStatus = "STABLE";
-    stabilityTimer++;
-  } else {
-    // Default state: the glitch is active and loose
-    systemStatus = "ERRATIC";
-    if (stabilityTimer > 0) stabilityTimer--; // Lose stability progress
-  }
-
-  // 3. Render and Behavior based on System Status
-  if (systemStatus === "REBOOT") {
-    // Visual style for Reboot
-    background(0, 255, 100, 50); // Flash green Matrix-style screen
-    fill(255);
-    textSize(32);
-    textAlign(CENTER, CENTER);
-    text("SYSTEM REBOOT IN PROGRESS...", width / 2, height / 2);
-    
-    // Slow down and center the glitch during reboot
-    glitchX = lerp(glitchX, width / 2, 0.1);
-    glitchY = lerp(glitchY, height / 2, 0.1);
-    
-  } else if (systemStatus === "STABLE") {
-    // Visual style for Stable (Captured)
-    glitchColor = color(0, 220, 255, 200); // Cool cyan cyan
-    fill(glitchColor);
+  // Calculate mouse speed to drive the glitch behavior dynamically
+  let mouseVelocity = dist(mouseX, mouseY, pmouseX, pmouseY);
+  
+  // Update glitch position using random offsets scaled by mouse movement
+  glitchX += random(-systemSpeed, systemSpeed) * (mouseVelocity * 0.1 + 1);
+  glitchY += random(-systemSpeed, systemSpeed) * (mouseVelocity * 0.1 + 1);
+  
+  // Keep the glitch within the responsive canvas boundaries
+  glitchX = constrain(glitchX, 0, width);
+  glitchY = constrain(glitchY, 0, height);
+  
+  // Calculate distance from user to the core glitch
+  let distanceToGlitch = dist(mouseX, mouseY, glitchX, glitchY);
+  
+  /* 
+    Conditional Statement: Complex system stability evaluation 
+    Triggers different visual states based on user proximity to the glitch
+  */
+  if (distanceToGlitch < 80) {
+    // Critical Breach State: User is very close
+    systemStability = "CRITICAL";
+    particleSize = random(40, 120);
+    fill(random(0, 30), 90, 100, 80); // High-alert reds and oranges
     stroke(255);
-    strokeWeight(2);
-    rect(glitchX, glitchY, glitchSize, glitchSize);
-    
-    // Add a visual "containment ring" that shrinks as it stabilizes
-    noFill();
-    stroke(0, 220, 255);
-    let ringSize = glitchSize * (1 + sin(frameCount * 0.1) * 0.2);
-    ellipse(glitchX, glitchY, ringSize);
-
+    strokeWeight(random(1, 4));
+  } else if (distanceToGlitch >= 80 && distanceToGlitch < 250) {
+    // Unstable State: User is tracking the glitch
+    systemStability = "UNSTABLE";
+    particleSize = random(15, 50);
+    fill((baseHue + random(-30, 30)) % 360, 85, 90, 60); // Shifting base colors
+    stroke((baseHue + 120) % 360, 80, 90, 50);
+    strokeWeight(1);
   } else {
-    // Visual style for Erratic (Glitching)
-    // Use random() to simulate a broken, vibrating digital entity
-    glitchX += random(-15, 15);
-    glitchY += random(-15, 15);
-    
-    // Keep the glitch within the screen boundaries
-    glitchX = constrain(glitchX, glitchSize, width - glitchSize);
-    glitchY = constrain(glitchY, glitchSize, height - glitchSize);
-
-    // Randomize colors rapidly for a true glitch aesthetic
-    glitchColor = color(random(200, 255), random(0, 100), random(100, 255), random(150, 255));
-    fill(glitchColor);
+    // Nominal Idle State: User is far away
+    systemStability = "NOMINAL";
+    particleSize = random(5, 15);
+    fill(baseHue, 40, 50, 30); // Dimmer, subdued tones
     noStroke();
-    
-    // Draw erratic offset rectangles to simulate screen tearing
-    rect(glitchX + random(-10, 10), glitchY, glitchSize, glitchSize * random(0.8, 1.2));
-    
-    // Occasionally teleport the glitch to mimic extreme data lag
-    if (random(1) < 0.02) {
-      resetGlitch();
-    }
   }
-
-  // Draw UI Layer
-  drawUI();
+  
+  // Draw the core glitch artifacts based on the state calculated above
+  rectMode(CENTER);
+  rect(glitchX, glitchY, particleSize * 2, particleSize * 0.5);
+  ellipse(glitchX + random(-20, 20), glitchY + random(-20, 20), particleSize);
+  
+  // Advanced Interactive Concept: Mouse Input (Clicking alters the time-step)
+  if (mouseIsPressed) {
+    // "Overclock" mode draws severe horizontal matrix fragments
+    stroke(random(360), 90, 100, 40);
+    line(0, glitchY + random(-50, 50), width, glitchY + random(-50, 50));
+    line(glitchX + random(-50, 50), 0, glitchX + random(-50, 50), height);
+  }
+  
+  // Draw scrolling cyber scanlines for environmental texture
+  stroke(0, 0, 100, 8);
+  strokeWeight(1);
+  line(0, scanlineY, width, scanlineY);
+  scanlineY = (scanlineY + 3) % height;
+  
+  // Display a modern HUD element tracking the system values
+  noStroke();
+  fill(0, 0, 100, 70);
+  textSize(14);
+  textFont('monospace');
+  text(`SYS_STATUS: ${systemStability}`, 20, 30);
+  text(`GLITCH_COORD: [${floor(glitchX)}, ${floor(glitchY)}]`, 20, 50);
+  text(`DIST_TO_TARGET: ${floor(distanceToGlitch)}px`, 20, 70);
 }
 
-// 4. Responsive Canvas handling
+// Interactive Concept: Keyboard Input to shift the base parameters
+function keyPressed() {
+  if (key === 'R' || key === 'r') {
+    baseHue = random(0, 360); // Randomizes the target color anchor completely
+    background(0); // Instantly clears the trail matrix
+  }
+}
+
+// Responsiveness: Automatically resizes the canvas if the browser window changes
 function windowResized() {
   resizeCanvas(800, 600);
-}
-
-// Helper function to randomize position using random()
-function resetGlitch() {
-  glitchX = random(width * 0.2, width * 0.8);
-  glitchY = random(height * 0.2, height * 0.8);
-}
-
-// Concept development: UI overlay showing system diagnostics
-function drawUI() {
-  fill(255, 150);
-  textSize(14);
-  textAlign(LEFT, TOP);
-  textFont('Courier New');
-  
-  text(`SYSTEM_STATUS: ${systemStatus}`, 20, 20);
-  text(`CONTAINMENT_LEVEL: ${stabilityTimer}%`, 20, 40);
-  
-  // Draw a progress bar for containment
-  stroke(255, 50);
-  noFill();
-  rect(120, 75, 200, 10);
-  fill(glitchColor);
-  noStroke();
-  let barWidth = map(constrain(stabilityTimer, 0, 100), 0, 100, 0, 200);
-  rect(120, 75, barWidth, 10);
+  background(0);
 }
