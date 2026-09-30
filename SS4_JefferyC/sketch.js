@@ -6,7 +6,7 @@
     - Click the mouse to instantly scramble the glitch's color palette.
     - Press any key to reset the system stability if it drops too low.
   Description: 
-    This interactive piece explores the theme of digital instability and human intervention. 
+    This theme explores the theme of digital instability and human intervention. 
     A generative "glitch core" constantly threatens to destabilize the canvas, while the user 
     acts as a manual debugger, trying to keep the system balanced by tracking the anomaly.
 */
