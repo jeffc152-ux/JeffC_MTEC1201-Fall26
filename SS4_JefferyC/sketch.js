@@ -14,10 +14,10 @@
 // 1. Declared variables
 let glitchX;
 let glitchY;
-let glitchSize = 100
-let systemStability = 50
-let integrityColor = color(255, 255, 255);
-let glitchSpeed = 10
+let glitchSize;
+let systemStability;
+let integrityColor;
+let glitchSpeed;
 
 function setup() {
   // Makes the canvas responsive to the initial window size
