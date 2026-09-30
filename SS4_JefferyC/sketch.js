@@ -2,120 +2,154 @@
   Name: Jeffery Chong
   Title: Catch the Glitch
   Instructions: 
-    - Move your mouse over the screen to search for the shifting glitch.
-    - Click and hold the mouse button to "overclock" the system and intensify the corruption.
-    - Press the 'R' or 'r' key to completely reset the system's baseline color palette.
+    - Move your mouse over the moving glitch anomalies to "patch" them.
+    - Click the mouse to instantly scramble the glitch's color palette.
+    - Press any key to reset the system stability if it drops too low.
   Description: 
-    This concept/theme explores the aesthetic of digital decay, cyber-fragmentation, 
-    and system instability. By monitoring the mouse's velocity and position, the sketch 
-    proconstructs a dynamic canvas that responds to user urgency, leaving behind artifacts 
-    of a visual system struggling to maintain its structure.
+    This interactive piece explores the theme of digital instability and human intervention. 
+    A generative "glitch core" constantly threatens to destabilize the canvas, while the user 
+    acts as a manual debugger, trying to keep the system balanced by tracking the anomaly.
 */
 
-// Declared variables for system state, positions, and colors
+// 1. Declared variables
 let glitchX;
 let glitchY;
-let particleSize;
+let glitchSize;
 let systemStability;
-let systemSpeed = 5;
-let baseHue;
-let scanlineY = 0;
+let integrityColor;
+let glitchSpeed;
 
 function setup() {
-  // Makes the canvas fully responsive to the initial window size
+  // Makes the canvas responsive to the initial window size
   createCanvas(800, 600);
-  colorMode(HSB, 360, 100, 100, 100);
-  background(0);
-  
-  // Initialize variable values
-  glitchX = width / 2;
-  glitchY = height / 2;
-  baseHue = random(180, 280); // Starts with cyber blues/purples
+  rectMode(CENTER);
+  resetSystem();
 }
 
 function draw() {
-  // Semi-transparent background creates a digital trailing/ghosting effect
-  background(0, 0, 0, 12);
-  
-  // Calculate mouse speed to drive the glitch behavior dynamically
-  let mouseVelocity = dist(mouseX, mouseY, pmouseX, pmouseY);
-  
-  // Update glitch position using random offsets scaled by mouse movement
-  glitchX += random(-systemSpeed, systemSpeed) * (mouseVelocity * 0.1 + 1);
-  glitchY += random(-systemSpeed, systemSpeed) * (mouseVelocity * 0.1 + 1);
-  
-  // Keep the glitch within the responsive canvas boundaries
-  glitchX = constrain(glitchX, 0, width);
-  glitchY = constrain(glitchY, 0, height);
-  
-  // Calculate distance from user to the core glitch
-  let distanceToGlitch = dist(mouseX, mouseY, glitchX, glitchY);
-  
-  /* 
-    Conditional Statement: Complex system stability evaluation 
-    Triggers different visual states based on user proximity to the glitch
-  */
-  if (distanceToGlitch < 80) {
-    // Critical Breach State: User is very close
-    systemStability = "CRITICAL";
-    particleSize = random(40, 120);
-    fill(random(0, 30), 90, 100, 80); // High-alert reds and oranges
-    stroke(255);
-    strokeWeight(random(1, 4));
-  } else if (distanceToGlitch >= 80 && distanceToGlitch < 250) {
-    // Unstable State: User is tracking the glitch
-    systemStability = "UNSTABLE";
-    particleSize = random(15, 50);
-    fill((baseHue + random(-30, 30)) % 360, 85, 90, 60); // Shifting base colors
-    stroke((baseHue + 120) % 360, 80, 90, 50);
-    strokeWeight(1);
+  // Dark cyber background with a slight alpha trail for motion blur
+  background(10, 15, 25, 40);
+
+  // Calculate distance between mouse (user patcher) and the glitch core
+  let distance = dist(mouseX, mouseY, glitchX, glitchY);
+
+  // 2. Conditional statement using if, else if, and else
+  if (distance < glitchSize / 2) {
+    // User is successfully "catching" the glitch
+    systemStability += 1.5; 
+    integrityColor = color(0, 255, 150); // Healing Green
+    
+    // Slow down the glitch as it is being contained
+    glitchX += random(-2, 2);
+    glitchY += random(-2, 2);
+  } else if (systemStability > 30) {
+    // Glitch is loose and actively destabilizing the system
+    systemStability -= 0.25;
+    integrityColor = color(0, 195, 255); // Standard Cyber Blue
+    
+    // 3. Use of the random() function for chaotic glitch movement
+    glitchX += random(-glitchSpeed, glitchSpeed);
+    glitchY += random(-glitchSpeed, glitchSpeed);
   } else {
-    // Nominal Idle State: User is far away
-    systemStability = "NOMINAL";
-    particleSize = random(5, 15);
-    fill(baseHue, 40, 50, 30); // Dimmer, subdued tones
-    noStroke();
+    // Critical Failure State: System stability is dangerously low (< 30%)
+    systemStability -= 0.5;
+    integrityColor = color(255, 50, 75); // Danger Red
+    
+    // Glitch becomes highly erratic and aggressive
+    glitchX += random(-glitchSpeed * 2, glitchSpeed * 2);
+    glitchY += random(-glitchSpeed * 2, glitchSpeed * 2);
+    
+    // Screen shake effect
+    translate(random(-3, 3), random(-3, 3));
   }
+
+  // Constrain variables to valid ranges
+  systemStability = constrain(systemStability, 0, 100);
+  glitchX = constrain(glitchX, 50, width - 50);
+  glitchY = constrain(glitchY, 50, height - 50);
+
+  // Draw the Glitch Core (Advanced concept: Generative digital artifacts)
+  drawGlitchCore();
+
+  // Draw HUD (Heads Up Display) showing system health
+  drawHUD();
+}
+
+// Advanced Concept: Layered, procedural shapes creating a digitized glitch effect
+function drawGlitchCore() {
+  stroke(integrityColor);
+  noFill();
   
-  // Draw the core glitch artifacts based on the state calculated above
-  rectMode(CENTER);
-  rect(glitchX, glitchY, particleSize * 2, particleSize * 0.5);
-  ellipse(glitchX + random(-20, 20), glitchY + random(-20, 20), particleSize);
-  
-  // Advanced Interactive Concept: Mouse Input (Clicking alters the time-step)
-  if (mouseIsPressed) {
-    // "Overclock" mode draws severe horizontal matrix fragments
-    stroke(random(360), 90, 100, 40);
-    line(0, glitchY + random(-50, 50), width, glitchY + random(-50, 50));
-    line(glitchX + random(-50, 50), 0, glitchX + random(-50, 50), height);
+  // Dynamic matrix lines pointing to the glitch
+  strokeWeight(0.5);
+  line(glitchX, 0, glitchX, height);
+  line(0, glitchY, width, glitchY);
+
+  // Layered digital squares
+  for (let i = 0; i < 3; i++) {
+    strokeWeight(random(1, 4));
+    let offset = random(-15, 15);
+    
+    if (random(1) > 0.5) {
+      fill(red(integrityColor), green(integrityColor), blue(integrityColor), 30);
+    } else {
+      noFill();
+    }
+    
+    rect(glitchX + offset, glitchY + random(-10, 10), glitchSize * random(0.5, 1.2));
   }
-  
-  // Draw scrolling cyber scanlines for environmental texture
-  stroke(0, 0, 100, 8);
-  strokeWeight(1);
-  line(0, scanlineY, width, scanlineY);
-  scanlineY = (scanlineY + 3) % height;
-  
-  // Display a modern HUD element tracking the system values
+}
+
+function drawHUD() {
   noStroke();
-  fill(0, 0, 100, 70);
-  textSize(14);
-  textFont('monospace');
-  text(`SYS_STATUS: ${systemStability}`, 20, 30);
-  text(`GLITCH_COORD: [${floor(glitchX)}, ${floor(glitchY)}]`, 20, 50);
-  text(`DIST_TO_TARGET: ${floor(distanceToGlitch)}px`, 20, 70);
-}
-
-// Interactive Concept: Keyboard Input to shift the base parameters
-function keyPressed() {
-  if (key === 'R' || key === 'r') {
-    baseHue = random(0, 360); // Randomizes the target color anchor completely
-    background(0); // Instantly clears the trail matrix
+  fill(255, 200);
+  textSize(16);
+  fontFamily = 'monospace';
+  text(`SYSTEM INTEGRITY: ${floor(systemStability)}%`, 30, 40);
+  
+  // Health bar layout
+  fill(40);
+  rect(130, 60, 200, 10);
+  fill(integrityColor);
+  rectMode(CORNER);
+  rect(30, 55, map(systemStability, 0, 100, 0, 200), 10);
+  rectMode(CENTER); // Reset to center mode
+  
+  if (systemStability <= 0) {
+    fill(255, 0, 0);
+    textSize(32);
+    text("SYSTEM COLLAPSE", width / 2 - 150, height / 2);
   }
 }
 
-// Responsiveness: Automatically resizes the canvas if the browser window changes
+// 4. Mouse Input
+function mousePressed() {
+  // Scramble the glitch size and speed when clicked, forcing it to mutate
+  glitchSize = random(40, 120);
+  glitchSpeed = random(5, 15);
+  
+  // Visual burst flash
+  background(255, 50);
+}
+
+// 4. Keyboard Input
+function keyPressed() {
+  // Emergency reboot if things get out of hand
+  resetSystem();
+}
+
+// Helper function to initialize/reset variables
+function resetSystem() {
+  glitchX = width / 2;
+  glitchY = height / 2;
+  glitchSize = 80;
+  glitchSpeed = 8;
+  systemStability = 100;
+  integrityColor = color(0, 195, 255);
+}
+
+// Ensures responsiveness if the browser window size changes mid-experience
 function windowResized() {
   resizeCanvas(800, 600);
-  background(0);
+  resetSystem();
 }
