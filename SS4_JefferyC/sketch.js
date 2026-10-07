@@ -1,7 +1,6 @@
 /*
   Name: Jeffery Chong
   Title: Solar Bloom & Time-based Day-Night Cycle
-  Theme: Celestial rhythm and blooming nature using time-based progression.
   Instructions:
     - Watch the central sunflower transition through phases based on elapsed time (`millis()`).
     - Move your mouse horizontally across the canvas to control the size/scale of the blooming effect.
