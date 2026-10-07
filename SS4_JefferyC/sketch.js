@@ -7,7 +7,7 @@
   - Watch the day/night sky cycle transition automatically over time using millis().
 */
 
-let img;
+let sunflower;
 let lastPulseTime = 0;
 let pulseDuration = 1000; // pulse effect lasts 1 second
 
@@ -20,7 +20,7 @@ async function setup()
   imageMode(CENTER);
   textAlign(CENTER, CENTER);
 
-  img = await loadImage("assets/sunflower.jpg");
+  sunflower = await loadImage("assets/sunflower.png");
 }
 
 function draw() {
@@ -43,17 +43,17 @@ function draw() {
 
   // Interactive proximity logic
   let d = dist(mouseX, mouseY, width / 2, height / 2);
-  let imgScale = 1.0;
+  let sunflowerScale = 1.0;
   let targetOpacity = 180;
 
   if (d < 150) 
   {
-    imgScale = 1.15;
+    sunflowerScale = 1.15;
     targetOpacity = 255; // Target full opacity when hovering
   } 
   else 
   {
-    imgScale = 1.0;
+    sunflowerScale = 1.0;
     targetOpacity = 120; // Target lower opacity when idle
   }
 
@@ -63,11 +63,11 @@ function draw() {
   // Draw external image with dynamic opacity and scale
   push();
   translate(width / 2, height / 2);
-  scale(imgScale);
+  scale(sunflowerScale);
   tint(255, opacity); // Uses the explicit `opacity` variable
-  if (img) 
+  if (sunflower) 
   {
-    image(img, 0, 0, 300, 300);
+    image(sunflower, 0, 0, 300, 300);
   }
   pop();
 
