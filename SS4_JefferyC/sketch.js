@@ -1,63 +1,102 @@
 /*
   Name: Jeffery Chong
-  Title: Solar Bloom & Time-based Day-Night Cycle
+  Title: Solar Bloom
   Instructions:
-    - Watch the central sunflower transition through phases based on elapsed time (`millis()`).
-    - Move your mouse horizontally across the canvas to control the size/scale of the blooming effect.
+  - Click anywhere on the canvas to trigger an instant solar glow pulse.
+  - Hover near the center to make the sunflower react, enlarge, and smoothly fade to full opacity.
+  - Watch the day/night sky cycle transition automatically over time using millis().
 */
 
-let sunflowerImg;
-let startTime;
+let img;
+let lastPulseTime = 0;
+let pulseDuration = 1000; // pulse effect lasts 1 second
+
+let opacity = 0; 
+let fade = 1;
 
 async function setup() 
 {
   createCanvas(600, 600);
   imageMode(CENTER);
-  textAlign(LEFT, TOP);
-  textSize(18);
-  
-  // Using p5.js v2 async/await pattern instead of deprecated preload()
-  sunflowerImg = await loadImage("assets/sunflower.jpg");
-  
-  startTime = millis();
+  textAlign(CENTER, CENTER);
+
+  img = await loadImage("assets/sunflower.jpg");
 }
 
-function draw() 
-{
-  let elapsedTime = millis() - startTime;
-  
-  // Conditional statement based on timed events using millis()
-  // Cycle background and theme every 10 seconds (10000 ms)
-  let cycleTime = elapsedTime % 10000;
-  
+function draw() {
+  let currentTime = millis();
+
+  // Dynamic sky background color cycling over a 10-second period
+  let cycleTime = currentTime % 10000;
+  let bgBrightness;
   if (cycleTime < 5000) 
   {
-    // Day Mode
-    background(135, 206, 235);
-    fill(40);
-    text("Phase: Daytime Bloom", 20, 20);
+    // Day phase
+    bgBrightness = map(cycleTime, 0, 5000, 180, 50);
   } 
   else 
   {
-    // Night Mode
-    background(20, 24, 54);
-    fill(240);
-    text("Phase: Nighttime Rest", 20, 20);
+    // Night phase
+    bgBrightness = map(cycleTime, 5000, 10000, 50, 180);
   }
-  
-  // Display timer info
+  background(20, 30, bgBrightness);
+
+  // Interactive proximity logic
+  let d = dist(mouseX, mouseY, width / 2, height / 2);
+  let imgScale = 1.0;
+  let targetOpacity = 180;
+
+  if (d < 150) 
+  {
+    imgScale = 1.15;
+    targetOpacity = 255; // Target full opacity when hovering
+  } 
+  else 
+  {
+    imgScale = 1.0;
+    targetOpacity = 120; // Target lower opacity when idle
+  }
+
+  // Smooth opacity fade transition using the explicit `fade` step variable
+  opacity = lerp(opacity, targetOpacity, fade);
+
+  // Draw external image with dynamic opacity and scale
+  push();
+  translate(width / 2, height / 2);
+  scale(imgScale);
+  tint(255, opacity); // Uses the explicit `opacity` variable
+  if (img) 
+  {
+    image(img, 0, 0, 300, 300);
+  }
+  pop();
+
+  // Timed Event: Solar pulse effect with fading stroke alpha
+  if (currentTime - lastPulseTime < pulseDuration) {
+    let alpha = map(currentTime - lastPulseTime, 0, pulseDuration, 255, 0);
+    noFill();
+    stroke(255, 204, 0, alpha);
+    strokeWeight(8);
+    let radius = map(currentTime - lastPulseTime, 0, pulseDuration, 300, 500);
+    ellipse(width / 2, height / 2, radius, radius);
+  }
+
+  // Display UI overlay text with soft pulsing text opacity
+  let textOpacity = map(sin(currentTime * 0.002), -1, 1, 150, 255);
+  noStroke();
+  fill(255, textOpacity);
+  textSize(24);
+  text("Solar Bloom", width / 2, 40);
+
   textSize(14);
-  text("Elapsed Time: " + floor(elapsedTime / 1000) + "s", 20, 50);
-  text("Interactive Mouse X: " + floor(mouseX), 20, 70);
+  text("Time Elapsed: " + nf(currentTime / 1000, 0, 1) + "s", width / 2, 75);
+  text("Click to trigger solar pulse | Hover over flower to interact", width / 2, height - 30);
+}
 
-  // Responsive image positioning and dynamic sizing
-  let baseSize = min(width, height) * 0.4;
-  let dynamicScale = map(mouseX, 0, width, 0.8, 1.4, true);
-  let imgWidth = baseSize * dynamicScale;
-  let imgHeight = baseSize * dynamicScale;
-
-  // Render the external sunflower image
-  image(sunflowerImg, width / 2, height / 2, imgWidth, imgHeight);
+function mousePressed() 
+{
+  // Store the timestamp of click for the timed event
+  lastPulseTime = millis();
 }
 
 function windowResized() 

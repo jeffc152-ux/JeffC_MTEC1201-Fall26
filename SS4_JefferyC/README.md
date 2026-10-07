@@ -1,4 +1,4 @@
-# SS4_JefferyC
+# responsive_sketch
 
 ## Getting Started
 
