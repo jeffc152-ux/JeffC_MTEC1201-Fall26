@@ -16,7 +16,7 @@ let telemetryParticles = [];
 function setup() 
 {
   createCanvas(800, 600);
-  textFont("Courier New");
+  textFont("Palatino Linotype");
   initializeParticles();
 }
 
