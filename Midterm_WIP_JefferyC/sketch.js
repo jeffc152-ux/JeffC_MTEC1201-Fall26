@@ -13,28 +13,38 @@ let signalVelocity = 1.5;
 let stabilityLevel = 100;
 let telemetryParticles = [];
 
-function setup() {
+function setup() 
+{
   createCanvas(800, 600);
-  textFont('Courier New');
+  textFont("Courier New");
   initializeParticles();
 }
 
-function draw() {
+function draw() 
+{
   // Main state machine handler
-  if (gameState === "MENU") {
+  if (gameState === "MENU") 
+  {
     drawMenuState();
-  } else if (gameState === "RUNNING") {
+  } 
+  else if (gameState === "RUNNING") 
+  {
     drawRunningState();
-  } else if (gameState === "OVERLOAD") {
+  } 
+  else if (gameState === "OVERLOAD") 
+  {
     drawOverloadState();
   }
 }
 
 // User-Defined Function 1: Initialize random telemetry particles
-function initializeParticles() {
+function initializeParticles() 
+{
   telemetryParticles = [];
-  for (let i = 0; i < 40; i++) {
-    telemetryParticles.push({
+  for (let i = 0; i < 40; i++) 
+  {
+    telemetryParticles.push
+    ({
       x: random(width),
       y: random(height),
       speed: random(0.5, 2),
@@ -44,19 +54,23 @@ function initializeParticles() {
 }
 
 // User-Defined Function 2: Draw background grid overlay
-function drawGridOverlay() {
+function drawGridOverlay() 
+{
   stroke(0, 150, 255, 40);
   strokeWeight(1);
-  for (let i = 0; i < width; i += width / 12) {
+  for (let i = 0; i < width; i += width / 12) 
+  {
     line(i, 0, i, height);
   }
-  for (let j = 0; j < height; j += height / 8) {
+  for (let j = 0; j < height; j += height / 8) 
+  {
     line(0, j, width, j);
   }
 }
 
 // User-Defined Function 3: Reset system state (Starts over without exiting)
-function resetSystem() {
+function resetSystem() 
+{
   gameState = "MENU";
   corePulseSize = 10;
   signalVelocity = 1.5;
@@ -64,7 +78,8 @@ function resetSystem() {
   initializeParticles();
 }
 
-function drawMenuState() {
+function drawMenuState() 
+{
   background(10, 15, 25);
   drawGridOverlay();
   
@@ -86,20 +101,25 @@ function drawMenuState() {
   textAlign(LEFT, BASELINE);
 }
 
-function drawRunningState() {
+function drawRunningState() 
+{
   background(10, 15, 25, 40);
   drawGridOverlay();
   
   // Update and render random telemetry particles
   noStroke();
-  for (let p of telemetryParticles) {
+  for (let p of telemetryParticles) 
+  {
     p.y -= p.speed;
     if (p.y < 0) p.y = height;
     
     // Conditional statement for random glitch flicker effect
-    if (random(1) > 0.98) {
+    if (random(1) > 0.98) 
+    {
       fill(255, 0, 128);
-    } else {
+    } 
+    else 
+    {
       fill(0, 255, 180, 150);
     }
     ellipse(p.x, p.y, p.size, p.size);
@@ -107,7 +127,8 @@ function drawRunningState() {
   
   // Core pulse dynamics
   corePulseSize += signalVelocity;
-  if (corePulseSize > width / 2) {
+  if (corePulseSize > width / 2) 
+  {
     corePulseSize = 10;
   }
   
@@ -136,17 +157,20 @@ function drawRunningState() {
   text("PRESS [SPACE] FOR STRESS TEST", 20, height - 20);
   
   // Conditional check for system overload state trigger
-  if (stabilityLevel <= 0) {
+  if (stabilityLevel <= 0) 
+  {
     gameState = "OVERLOAD";
   }
 }
 
-function drawOverloadState() {
+function drawOverloadState() 
+{
   background(40, 5, 10);
   drawGridOverlay();
   
   // Flashing warning border
-  if (frameCount % 30 < 15) {
+  if (frameCount % 30 < 15) 
+  {
     stroke(255, 0, 50, 200);
     strokeWeight(6);
     noFill();
@@ -169,8 +193,10 @@ function drawOverloadState() {
   textAlign(LEFT, BASELINE);
 }
 
-function mousePressed() {
-  if (gameState === "RUNNING") {
+function mousePressed() 
+{
+  if (gameState === "RUNNING") 
+  {
     fill(255, 255, 255, 200);
     noStroke();
     ellipse(mouseX, mouseY, 60, 60);
@@ -179,14 +205,20 @@ function mousePressed() {
   }
 }
 
-function keyPressed() {
-  if (gameState === "MENU" || keyCode === ENTER) {
+function keyPressed() 
+{
+  if (gameState === "MENU" || keyCode === ENTER) 
+  {
     gameState = "RUNNING";
-  } else if (gameState === "RUNNING" || key === 'SPACE') {
+  } 
+  else if (gameState === "RUNNING" || key === "SPACE") 
+  {
     // Stress test action
     stabilityLevel -= 25;
     signalVelocity += 1.0;
-  } else if (gameState === "OVERLOAD" || (key === 'r' || key === 'R')) {
+  } 
+  else if (gameState === "OVERLOAD" || (key === 'r' || key === 'R')) 
+  {
     resetSystem(); // Restarts from beginning without exiting program
   }
 }
