@@ -2,9 +2,9 @@
   Name: Jeffery Chong
   Title: Expanded Short Study Midterm Project (WIP)
   User Instructions:
-  - State 1 (Menu): Press [ENTER] to initialize the system.
-  - State 2 (Running): Move your mouse to steer crosshairs, click to pulse bio-nodes, and press [SPACEBAR] to run a system stress test.
-  - State 3 (Overload): Press [R] to reset the system cache and restart from the menu.
+  - State Change 1 (Menu): Press [ENTER] to initialize the system.
+  - State Change 2 (Running): Move your mouse to steer crosshairs, click to pulse bio-nodes, and press [SPACEBAR] to run a system stress test.
+  - State Change 3 (Overload): Press [R] to reset the system cache and restart from the menu.
 */
 
 let gameState = "MENU"; // States: "MENU", "RUNNING", "OVERLOAD"
