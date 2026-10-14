@@ -217,7 +217,7 @@ function keyPressed()
     stabilityLevel -= 25;
     signalVelocity += 1.0;
   } 
-  else if (gameState === "OVERLOAD" || (key === 'r' || key === 'R')) 
+  else if (gameState === "OVERLOAD" || (key === "r" || key === "R")) 
   {
     resetSystem(); // Restarts from beginning without exiting program
   }
