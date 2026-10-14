@@ -1,6 +1,6 @@
 /*
   Name: Jeffery Chong
-  Title: Cybernetic Biosphere: Control Room Alpha - Expanded Short Study
+  Title: Expanded Short Study Midterm Project (WIP)
   User Instructions:
   - State 1 (Menu): Press [ENTER] to initialize the system.
   - State 2 (Running): Move your mouse to steer crosshairs, click to pulse bio-nodes, and press [SPACEBAR] to run a system stress test.
