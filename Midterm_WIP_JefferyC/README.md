@@ -1,4 +1,4 @@
-# Midterm_WIP_JefferyC
+# Midterm_JefferyC
 
 ## Getting Started
 
