@@ -4,9 +4,10 @@
   Goal: Neutralize incoming corrupted data nodes or viruses before they breach the core.
   User Instructions:
   - State Change 1 (Menu): Press [ENTER] to initialize the system.
-  - State Change 2 (Running): Move your mouse to steer crosshairs, click to neutralize data glitches, 
-  and hold [SPACEBAR] to execute a System Purge.
-  - State Change 3 (Overload/Victory): Press [R] to reset the system cache and restart from the menu.
+  - State Change 2 (Running): Move your mouse to steer crosshairs, click to neutralize data 
+  glitches, and hold [SPACEBAR] to execute a System Purge.
+  - State Change 3 (Overload/Victory): Press [R] to reset the system cache and restart from 
+  the menu.
 */
 
 let gameState = "MENU"; // States: "MENU", "RUNNING", "OVERLOAD", "VICTORY"
