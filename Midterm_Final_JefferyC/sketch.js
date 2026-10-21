@@ -21,7 +21,7 @@ let corruptionNodes = [];
 async function setup() 
 {
   createCanvas(800, 600);
-  textFont("Palatino Linotype");
+  textFont("Courier Prime");
   initializeParticles();
 }
 
@@ -134,7 +134,8 @@ function drawRunningState()
   {
     let spawnAngle = random(TWO_PI);
     let spawnDist = width * 0.5;
-    corruptionNodes.push({
+    corruptionNodes.push
+    ({
       x: width / 2 + cos(spawnAngle) * spawnDist,
       y: height / 2 + sin(spawnAngle) * spawnDist,
       size: 24,
