@@ -18,7 +18,7 @@ let score = 0;
 let telemetryParticles = [];
 let corruptionNodes = [];
 
-async function setup() 
+function setup() 
 {
   createCanvas(800, 600);
   textFont("Courier Prime");
@@ -271,7 +271,7 @@ function mousePressed()
       if (dist(mouseX, mouseY, node.x, node.y) < node.size) 
       {
         corruptionNodes.splice(i, 1);
-        score += 25;
+        score += 20;
         stabilityLevel = min(100, stabilityLevel + 3); // Small reward for successful defense
         hitAny = true;
         break;
