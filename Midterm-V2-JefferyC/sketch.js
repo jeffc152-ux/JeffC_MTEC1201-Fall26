@@ -5,7 +5,7 @@
   User Instructions:
   - State Change 1 (Menu): Press [ENTER] to initialize the system.
   - State Change 2 (Running): Move your mouse to steer crosshairs, click to neutralize data 
-  glitches, press [SPACEBAR] for a purge cooldown, and hold [SPACEBAR] to execute a System Purge.
+  glitches, press [SPACEBAR] to clear all nodes, and hold [SPACEBAR] to execute a System Purge.
   - State Change 3 (Overload/Victory): Press [R] to reset the system cache and restart from 
   the menu.
 */
@@ -129,7 +129,7 @@ function drawMenuState()
   
   textSize(12);
   text("NOTE: If you keep holding or pressing SPACE to score points, then you're an idiot and a cheater.", width / 2, height / 2 + 120);
-  text("NOTE: Pressing SPACE for purge cooldown also makes the screen shake.", width / 2, height / 2 + 140);
+  text("NOTE: Pressing SPACE cools down system purge, makes the screen shake and reduce stability.", width / 2, height / 2 + 140);
   
   // Pulsing prompt text using sine wave
   fill(255, 255, 255, sin(frameCount * 0.1) * 127 + 128);
@@ -198,8 +198,8 @@ function drawRunningState()
     if (distToCore < corePulseSize * 0.5) 
     {
       corruptionNodes.splice(i, 1);
-      stabilityLevel -= 15; // Breach damages stability
-      screenShakeTimer = 15; // Trigger impact feedback shake
+      stabilityLevel -= 20; // Breach damages stability
+      screenShakeTimer = 20; // Trigger impact feedback shake
     }
   }
   
@@ -248,7 +248,7 @@ function drawRunningState()
   if (purgeCooldown === 0) 
   {
     fill(0, 255, 180);
-    text("PRESS [SPACE] FOR PURGE COOLDOWN", 650, height - 20);
+    text("PRESS [SPACE] TO RESET SCREEN", 660, height - 20);
   } 
   else 
   {
@@ -348,7 +348,7 @@ function keyPressed()
   else if (gameState === "RUNNING" || key === " ") 
   {
     // System Purge action clears screen nodes at a stability cost
-    stabilityLevel -= 15;
+    stabilityLevel -= 25;
     score += corruptionNodes.length * 10;
     corruptionNodes = [];
     screenShakeTimer = 5; // Heavy feedback shake for how many seconds 
