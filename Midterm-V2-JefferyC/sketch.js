@@ -1,6 +1,6 @@
 /*
   Name: Jeffery Chong
-  Title: Expanded Short Study Midterm Project (Final - Iteration 2)
+  Title: Expanded Short Study Midterm Project (2nd Iteration)
   Goal: Neutralize incoming corrupted data nodes or viruses before they breach the core.
   User Instructions:
   - State Change 1 (Menu): Press [ENTER] to initialize the system.
