@@ -117,7 +117,7 @@ function drawMenuState()
   
   noStroke();
   fill(0, 255, 180);
-  textSize(24);
+  textSize(28);
   textAlign(CENTER, CENTER);
   text("CYBERNETIC BIOSPHERE", width / 2, height / 2 - 80);
   text("CORE DEFENSE - MK II", width / 2, height / 2 - 45);
@@ -286,11 +286,11 @@ function drawOverloadState()
   textSize(26);
   textAlign(CENTER, CENTER);
   text("CRITICAL SYSTEM OVERLOAD", width / 2, height / 2 - 50);
-  
+  text("GAME OVER", width / 2, height / 2 - 10);
+
   fill(255, 200, 200);
   textSize(14);
-  text("Bio-data corruption breached the core. Final Score: " + score, width / 2, height / 2 - 10);
-  text("YOU IDIOT!!! YOU'RE A CHEATER!!!", width / 2, height / 2 + 90);
+  text("Bio-data corruption breached the core. Final Score: " + score, width / 2, height / 2 + 80);
 
   fill(255, 255, 255, sin(frameCount * 0.15) * 127 + 128);
   text(">> PRESS [R] TO REBOOT SYSTEM CACHE <<", width / 2, height / 2 + 40);
@@ -360,25 +360,6 @@ function keyPressed()
       score += corruptionNodes.length * 10;
       purgeCooldown = 180; // Set cooldown
     }
-
-    // Spawn large purge shockwave particles from center
-    for (let p = 0; p < 30; p++) 
-    {
-      let angle = random(TWO_PI);
-      let spd = random(2, 5);
-      clickParticles.push
-      ({
-        x: width / 2,
-        y: height / 2,
-        vx: cos(angle) * spd,
-        vy: sin(angle) * spd,
-        size: random(4, 8),
-        alpha: 255,
-        r: 255, g: 0, b: 128
-      });
-    }
-      
-    corruptionNodes = [];
   } 
   else if ((gameState === "OVERLOAD" || gameState === "VICTORY") || (key === "r" || key === "R")) 
   {
