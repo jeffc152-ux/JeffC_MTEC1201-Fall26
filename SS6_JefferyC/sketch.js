@@ -105,3 +105,16 @@ function addNode(x, y) {
   // Using array.push() to insert new data structure into the array
   nodes.push(newNode);
 }
+
+// Display interface and status
+function drawInterface() {
+  fill(0, 0, 100);
+  noStroke();
+  textSize(14);
+  textAlign(LEFT, TOP);
+  text(`Active Nodes (nodes.length): ${nodes.length}`, 20, 20);
+  text(`Frequencies Loaded (frequencies.length): ${frequencies.length}`, 20, 40);
+  
+  textAlign(RIGHT, TOP);
+  text(`Click: Add Node | 'C': Clear | 'R': Randomize`, width - 20, 20);
+}
